@@ -27,11 +27,13 @@ tsdata.d$id <- tsdata.d$`_unit_id`
 # the fame index was calculated by dividing the number of followers by the number of followings
 # Notice that there were 8 entries which follow `0` account, thus lead to some erros (infinity) as results
 filter(tsdata.d, follows == 0)
+which(tsdata.d$follows == 0)
 # Thus I mannually changed them to 1 instead of 0  
-filter(tsdata.d, follows == 0)
+tsdata.d[which(tsdata.d$follows == 0),]$follows <- 1
 tsdata.d$fame <- round(tsdata.d$follower/tsdata.d$follows, digits = 2)
 
 # And time is splited so we can evaluate the timex effects by years, months and hours 
+tsdata.d$date <- date(tsdata.d$time)
 tsdata.d$year <- year(tsdata.d$time) 
 tsdata.d$month <- month(tsdata.d$time)
 tsdata.d$day <- day(tsdata.d$time)
@@ -40,7 +42,7 @@ tsdata.d$hour <- hour(tsdata.d$time)
 # Finally form them into the readable table
 tsdata.d <- 
   tsdata.d %>% 
-  select(., id, year, month, day, hour , likes, shares, fame, cyberaggression, cyberbullying)
+  select(., id, date, year, month, day, hour , likes, shares, fame, cyberaggression, cyberbullying)
 
 ## Preliminary Data Plot to visualize the relations between variables  
-plot(tsdata.d[,6:10])
+plot(tsdata.d[,c(2,7:11)])
