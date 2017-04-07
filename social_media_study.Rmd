@@ -1,0 +1,48 @@
+---
+title: "Social_media_studies"
+author: "Linfeng He"
+date: "4/6/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(stringr)
+library(lubridate)
+install.packages("scatterplot3d", lib = "u:/STAT3401/mvm")
+library(scatterplot3d)
+```
+
+#### 1). Data Imported
+
+```{r}
+d <- read_csv("sessions_40plus_metadata.csv")
+tsdata.d <- select(d, `_unit_id`, `cptn_time`,likes,`shared media`,`followed_by`,follows,cyberaggression,cyberbullying)
+```
+
+
+#### 2). Data cleaning
+
+```{r}
+tsdata.d$likes <- 
+  tsdata.d$likes %>%
+  str_replace(.,"likes","") %>%
+  as.integer()
+    
+tsdata.d$cptn_time <-
+  tsdata.d$cptn_time %>%
+  str_replace_all(., "[A-z]+","") %>%
+  str_trim() %>%
+  paste0("2",.) %>%
+  ymd_hms(., tz = "America/New_York")
+```
+
+#### 3). Preliminary Data Plot to visualize the relations between variables  
+
+
+```{r}
+scatterplot3d(x = (tsdata.d$followed_by/tsdata.d$follows), y = tsdata.d$`shared media` , z = tsdata.d$cyberbullying, 
+              xlab = "fame_index", ylab = "shares", zlab = "bully_index", highlight.3d = T, scale.y = 0.7)
+scatterplot3d(x = (tsdata.d$followed_by/tsdata.d$follows), y = tsdata.d$`shared media` , z = tsdata.d$cyberaggression,
+              xlab = "fame_index", ylab = "shares", zlab = "cyberaggression_index", highlight.3d = T, scale.y = 0.7)
+```
