@@ -46,3 +46,25 @@ tsdata.d <-
 
 ## Preliminary Data Plot to visualize the relations between variables  
 plot(tsdata.d[,c(2,7:11)])
+ggplot(data= tsdata.d) + geom_line(aes(cptn_time, cyberbullying))
+
+datahour <- 
+  group_by(tsdata.d, hour) %>% 
+  mutate(., ave_aggression = mean(cyberaggression)) %>%
+  mutate(., ave_cyberbullying = mean(cyberbullying))
+ggplot(data = datahour) + geom_line(aes(hour, ave_cyberbullying)) 
+
+dataday <- 
+  group_by(tsdata.d, year, month,day) %>% 
+  mutate(., ave_aggression = mean(cyberaggression)) %>%
+  mutate(., ave_cyberbullying = mean(cyberbullying))
+ggplot(data = dataday) + geom_line(aes(date, ave_cyberbullying)) 
+
+datamonth <- 
+  group_by(tsdata.d, year, month) %>% 
+  mutate(., ave_aggression = mean(cyberaggression)) %>%
+  mutate(., ave_cyberbullying = mean(cyberbullying))
+ggplot(data = datamonth) + geom_line(aes(date, ave_cyberbullying))
+## sentiments analysis 
+library(tidytext)
+sentiments
