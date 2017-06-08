@@ -69,6 +69,9 @@ for(i in 1:nrow(b_plus)){
   b_plus$index1[i] <- sum(word_split[which(word_split[,3]!="NA"),3])
   b_plus$index2[i] <- count(word_split, sentiment)[1,2] - count(word_split, sentiment)[2,2]
 } 
+b_plus[which(b_plus$index2 == "NA"),5] <- 0 
+b_plus$index2 <- as.numeric(b_plus$index2)
+
 plot(b_plus$time,b_plus$index1)
 plot(b_plus$time,b_plus$index2)
 plot(b_plus$index1,b_plus$index2)
